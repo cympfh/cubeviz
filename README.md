@@ -6,31 +6,37 @@ A Cube Vizualizer.
 
 ```bash
 $ cubeviz <input> > <out.svg>
+
+$ cubeviz < samples/face_with_side.dot | convert -size 200x200 - out.png  # svg -> png
 ```
 
-## Input Examples
+## Examples
 
 A Face 3x3
 
 ```
 Face {
-  O O W
-  W W Y
-  Y Y B
+  R O O
+  W Y Y
+  G B .
 }
 ```
+
+![](https://user-images.githubusercontent.com/2749629/184492773-98ffb3ec-c72c-457e-9392-fc90a8b4d90b.png)
 
 A Face with its side
 
 ```
 Face {
     G G B
-  W O O W R
-  B W W Y O
-  G Y Y B Y
+  W R O O R
+  B W Y Y O
+  G G B . Y
     O G R
 }
 ```
+
+![](https://user-images.githubusercontent.com/2749629/184492775-ca20fb0c-335c-4745-830a-7d5bd005116e.png)
 
 ## Colors
 
