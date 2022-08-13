@@ -16,6 +16,7 @@ pub fn parse(input: &str) -> Result<CubeViz, nom::Err<nom::error::Error<&str>>> 
 
 fn parse_face(input: &str) -> IResult<&str, Face> {
     let head = tuple((
+        commentable_spaces,
         tag("Face"),
         commentable_spaces,
         tag("{"),
