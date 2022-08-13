@@ -132,9 +132,9 @@ impl Color {
             White => "#f9f9f9",
             Yellow => "#ee4",
             Red => "#f77",
-            Orange => "#fb7",
-            Blue => "#7f7",
-            Green => "#77f",
+            Orange => "#fa4",
+            Blue => "#77f",
+            Green => "#7f7",
             Mask => "#c5c5c5",
         };
         String::from(r)

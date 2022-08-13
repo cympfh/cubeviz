@@ -43,7 +43,7 @@ Face {
 - `W`, White
 - `Y`, Yello
 - `R`, Red
-- `O`, O
+- `O`, Orange
 - `B`, Blue
 - `G`, Green
 - `.`, Masked cube
