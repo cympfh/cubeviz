@@ -1,7 +1,7 @@
 use nom::{
     branch::alt,
     bytes::complete::{is_not, tag, take_while},
-    combinator::{eof, map, opt},
+    combinator::{eof, map, opt, value},
     multi::{many0, many1},
     sequence::{delimited, terminated, tuple},
     IResult,
@@ -49,13 +49,13 @@ fn parse_face(input: &str) -> IResult<&str, Face> {
 fn parse_color(input: &str) -> IResult<&str, Color> {
     terminated(
         alt((
-            map(tag("W"), |_| Color::White),
-            map(tag("Y"), |_| Color::Yellow),
-            map(tag("R"), |_| Color::Red),
-            map(tag("O"), |_| Color::Orange),
-            map(tag("B"), |_| Color::Blue),
-            map(tag("G"), |_| Color::Green),
-            map(tag("."), |_| Color::Mask),
+            value(Color::White, tag("W")),
+            value(Color::Yellow, tag("Y")),
+            value(Color::Red, tag("R")),
+            value(Color::Orange, tag("O")),
+            value(Color::Blue, tag("B")),
+            value(Color::Green, tag("G")),
+            value(Color::Mask, tag(".")),
         )),
         commentable_spaces,
     )(input)
