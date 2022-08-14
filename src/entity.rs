@@ -1,4 +1,8 @@
-use svg::node::element::{path::Data, Path};
+use std::collections::HashMap;
+use svg::node::{
+    self,
+    element::{path::Data, Path, Text},
+};
 use svg::Document;
 
 pub enum CubeViz {
@@ -13,20 +17,31 @@ impl CubeViz {
     }
 }
 
+#[derive(Clone)]
+pub enum AttributeValue {
+    Str(String),
+}
+
 pub struct Face {
     data: [[Color; 3]; 3],
     side: Option<[[Color; 3]; 4]>,
+    attr: HashMap<String, AttributeValue>,
 }
 
 impl Face {
-    pub fn new(data: [[Color; 3]; 3], side: Option<[[Color; 3]; 4]>) -> Self {
-        Self { data, side }
+    pub fn new(
+        data: [[Color; 3]; 3],
+        side: Option<[[Color; 3]; 4]>,
+        attr: HashMap<String, AttributeValue>,
+    ) -> Self {
+        Self { data, side, attr }
     }
     pub fn tosvg(self) -> String {
         const CUBE_SIZE: i64 = 12;
         const MARGIN: i64 = 2;
         const SIDE_SIZE: i64 = 6;
         const STROKE_WIDTH: i64 = 1;
+        const FONT_SIZE: i64 = 8;
         fn rect(x: i64, y: i64, width: i64, height: i64, color: Color) -> Path {
             let data = Data::new()
                 .move_to((x, y))
@@ -97,6 +112,21 @@ impl Face {
                     MARGIN * 3 + CUBE_SIZE * 3,
                     side[3][j],
                 ));
+            }
+        }
+        if let Some(value) = self.attr.get("label") {
+            match value {
+                AttributeValue::Str(label) => {
+                    let label = Text::new()
+                        .add(node::Text::new(label))
+                        .set("x", vleft + vwidth / 2)
+                        .set("y", vtop + vheight + FONT_SIZE)
+                        .set("font-size", FONT_SIZE)
+                        .set("text-anchor", "middle")
+                        .set("dominant-baseline", "central");
+                    vheight += MARGIN + FONT_SIZE;
+                    document = document.add(label);
+                }
             }
         }
         document = document.set("viewBox", (vleft, vtop, vwidth, vheight));
