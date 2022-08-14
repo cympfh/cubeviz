@@ -52,6 +52,10 @@ impl Face {
             rect(x, y, SIDE_SIZE, CUBE_SIZE, color)
         }
         let mut document = Document::new();
+        let mut vleft = -MARGIN;
+        let mut vtop = -MARGIN;
+        let mut vwidth = MARGIN * 4 + CUBE_SIZE * 3;
+        let mut vheight = MARGIN * 4 + CUBE_SIZE * 3;
         for i in 0..3_usize {
             for j in 0..3_usize {
                 document = document.add(sq(
@@ -62,6 +66,10 @@ impl Face {
             }
         }
         if let Some(side) = self.side {
+            vleft -= MARGIN + SIDE_SIZE;
+            vtop -= MARGIN + SIDE_SIZE;
+            vwidth += (MARGIN + SIDE_SIZE) * 2;
+            vheight += (MARGIN + SIDE_SIZE) * 2;
             for j in 0..3 {
                 document = document.add(side_hr(
                     (MARGIN + CUBE_SIZE) * j as i64,
@@ -91,25 +99,7 @@ impl Face {
                 ));
             }
         }
-
-        document = document.set(
-            "viewBox",
-            if self.side.is_none() {
-                (
-                    -MARGIN,
-                    -MARGIN,
-                    CUBE_SIZE * 3 + MARGIN * 4,
-                    CUBE_SIZE * 3 + MARGIN * 4,
-                )
-            } else {
-                (
-                    -MARGIN * 2 - SIDE_SIZE,
-                    -MARGIN * 2 - SIDE_SIZE,
-                    CUBE_SIZE * 3 + MARGIN * 6 + SIDE_SIZE * 2,
-                    CUBE_SIZE * 3 + MARGIN * 6 + SIDE_SIZE * 2,
-                )
-            },
-        );
+        document = document.set("viewBox", (vleft, vtop, vwidth, vheight));
         document.to_string()
     }
 }
