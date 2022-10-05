@@ -1,11 +1,13 @@
 Cube {
-  BBB
-  BWW
-  BWW
-  RGG RRY OOO WWW
-  RGG RRY OBB OOW
-  RRR YYY OBB OOW
-  YYG
-  YYG
-  GGG
+  YYY
+  WWW
+  WWW
+
+  GGG RRO BBB ROO
+  GGG RRO BBB ROO
+  BBB ROO GGG RRO
+
+  WWW
+  YYY
+  YYY
 }

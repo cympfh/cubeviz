@@ -10,9 +10,6 @@ const MARGIN: i64 = 2;
 const SIDE_SIZE: i64 = 6;
 const STROKE_WIDTH: i64 = 1;
 const FONT_SIZE: i64 = 8;
-const THETA: f64 = 0.1;
-const PHI: f64 = 0.2;
-const PI: f64 = 3.141592654;
 
 pub enum CubeViz {
     Face(Face),
@@ -202,7 +199,7 @@ impl Cube {
         }
     }
     fn tosvg(&self) -> String {
-        fn skewd_rect(x: i64, y: i64, width: i64, height: i64, color: Color) -> Path {
+        fn rect(x: i64, y: i64, width: i64, height: i64, color: Color) -> Path {
             let data = Data::new()
                 .move_to((x, y))
                 .line_by((width, 0))
@@ -217,24 +214,36 @@ impl Cube {
                 .set("d", data);
             path
         }
-        fn sq(x: i64, y: i64, color: Color, theta: f64, phi: f64) -> Path {
-            skewd_rect(x, y, CUBE_SIZE, CUBE_SIZE, color)
+        fn sq(x: i64, y: i64, color: Color) -> Path {
+            rect(x, y, CUBE_SIZE, CUBE_SIZE, color)
         }
-        let mut document = Document::new();
-        // Front
-        let mut g = Group::new();
-        for i in 0..3_usize {
-            for j in 0..3_usize {
-                g = g.add(sq(
-                    (MARGIN + CUBE_SIZE) * j as i64,
-                    (MARGIN + CUBE_SIZE) * i as i64,
-                    self.front.data[i][j],
-                    THETA,
-                    PHI,
-                ));
+        fn face(f: &Face, offset_x: i64, offset_y: i64) -> Group {
+            let mut g = Group::new();
+            for i in 0..3_usize {
+                for j in 0..3_usize {
+                    g = g.add(sq(
+                        offset_x + (MARGIN + CUBE_SIZE) * j as i64,
+                        offset_y + (MARGIN + CUBE_SIZE) * i as i64,
+                        f.data[i][j],
+                    ));
+                }
             }
+            g
         }
-        document = document.add(g);
+        let cwidth = MARGIN * 4 + CUBE_SIZE * 3;
+        let cheight = MARGIN * 4 + CUBE_SIZE * 3;
+        let mut document = Document::new();
+        document = document.add(face(&self.left, 0, cheight));
+        document = document.add(face(&self.front, cwidth, cheight));
+        document = document.add(face(&self.right, cwidth * 2, cheight));
+        document = document.add(face(&self.back, cwidth * 3, cheight));
+        document = document.add(face(&self.up, cwidth, 0));
+        document = document.add(face(&self.down, cwidth, cheight * 2));
+        let vleft = -MARGIN;
+        let vtop = -MARGIN;
+        let vwidth = cwidth * 4;
+        let vheight = cheight * 3;
+        document = document.set("viewBox", (vleft, vtop, vwidth, vheight));
         document.to_string()
     }
 }
