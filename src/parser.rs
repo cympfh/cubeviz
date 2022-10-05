@@ -10,7 +10,10 @@ use nom::{
 use crate::entity::*;
 
 pub fn parse(input: &str) -> Result<CubeViz, nom::Err<nom::error::Error<&str>>> {
-    let (_, res) = map(parse_face, |f| CubeViz::Face(f))(input)?;
+    let (_, res) = alt((
+        map(parse_face, |f| CubeViz::Face(f)),
+        map(parse_cube, |c| CubeViz::Cube(c)),
+    ))(input)?;
     Ok(res)
 }
 
@@ -48,6 +51,40 @@ fn parse_face(input: &str) -> IResult<&str, Face> {
         return Ok((rest, Face::new(data, Some(side), attrs)));
     }
     panic!("A Face must have 9 or 9+12 colors.")
+}
+
+fn parse_cube(input: &str) -> IResult<&str, Cube> {
+    let head = tuple((
+        commentable_spaces,
+        tag("Cube"),
+        commentable_spaces,
+        tag("{"),
+        commentable_spaces,
+    ));
+    let tail = tuple((tag("}"), commentable_spaces));
+
+    let parse_attrs = map(many0(parse_attr), |v| v.into_iter().collect());
+    let parse_colors = many1(parse_color);
+
+    let (rest, (attrs, colors)) = delimited(head, tuple((parse_attrs, parse_colors)), tail)(input)?;
+    if colors.len() != 9 * 6 {
+        panic!("A Face must have 54 (=9*6) colors.")
+    }
+    let c = Cube::from(
+        vec![
+            colors[..3].to_vec(),
+            colors[3..6].to_vec(),
+            colors[6..9].to_vec(),
+            colors[9..21].to_vec(),
+            colors[21..33].to_vec(),
+            colors[33..45].to_vec(),
+            colors[45..48].to_vec(),
+            colors[48..51].to_vec(),
+            colors[51..54].to_vec(),
+        ],
+        attrs,
+    );
+    Ok((rest, c))
 }
 
 fn parse_color(input: &str) -> IResult<&str, Color> {
