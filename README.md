@@ -38,6 +38,26 @@ Face {
 
 ![](https://user-images.githubusercontent.com/2749629/184492775-ca20fb0c-335c-4745-830a-7d5bd005116e.png)
 
+A whole cube (net style)
+
+```
+Cube {
+    ...
+    ...
+    ...
+
+    ... ... ... ...
+    RRG RGG OOO BBB
+    RRR GGG OOO BBB
+
+    WWW
+    WWW
+    WWW
+}
+```
+
+![](https://user-images.githubusercontent.com/2749629/210928081-0a7f7612-29ee-4271-bb38-1492339eeb15.png)
+
 ## Colors
 
 - `W`, White
