@@ -120,8 +120,7 @@ impl Face {
         if let Some(value) = self.attr.get("label") {
             match value {
                 AttributeValue::Str(label) => {
-                    let label = Text::new()
-                        .add(node::Text::new(label))
+                    let label = Text::new(label)
                         .set("x", vleft + vwidth / 2)
                         .set("y", vtop + vheight + FONT_SIZE)
                         .set("font-size", FONT_SIZE)

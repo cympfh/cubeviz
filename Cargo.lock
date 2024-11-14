@@ -45,7 +45,7 @@ dependencies = [
 
 [[package]]
 name = "cubeviz"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "nom",
  "structopt",
@@ -178,9 +178,9 @@ dependencies = [
 
 [[package]]
 name = "svg"
-version = "0.10.0"
+version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e72d8b19ab05827afefcca66bf47040c1e66a0901eb814784c77d4ec118bd309"
+checksum = "94afda9cd163c04f6bee8b4bf2501c91548deae308373c436f36aeff3cf3c4a3"
 
 [[package]]
 name = "syn"
